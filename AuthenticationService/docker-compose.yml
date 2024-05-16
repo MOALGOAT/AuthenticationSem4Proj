@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: 1234
+    ports:
+      - 27019:27017
+    container_name: mongodb 
+    hostname: mongodb
+    volumes:
+      - mongodb_data_container:/data/db
+    networks:
+      - auctionnetwork
+
+  authenticationservice:  
+    image: jakobhaulund/authenticationservice6-image:1.0.0
+    ports:
+      - 82:8080
+    depends_on:
+      - mongodb
+      - vault
+    environment:
+      - ConnectionString=mongodb://admin:1234@mongodb:27017
+      - DatabaseName=4SemProj
+      - collectionName=Bruger
+      - vaultConnectionString=http://vault:8200
+    container_name: authenticationservice
+    hostname: authenticationservice
+    networks:
+      - auctionnetwork
+
+  userservice:
+    image: rasmusdd/userservice3-image:1.0.0
+    ports:
+      - 80:8080
+    depends_on: 
+      - mongodb
+    environment:
+      - ConnectionString=mongodb://admin:1234@mongodb:27017
+      - DatabaseName=4SemProj
+      - collectionName=Bruger
+    container_name: userservice 
+    hostname: userservice
+    networks:
+      - auctionnetwork
+
+  vault:
+    image: hashicorp/vault:latest
+    ports:
+      - 8200:8200
+    environment:
+      - VAULT_DEV_ROOT_TOKEN_ID=root-token
+    container_name: vault_dev-1
+    hostname: vault_dev
+    networks:
+      - auctionnetwork
+
+networks:
+  auctionnetwork:
+    name: auctionnetwork
+    external: true
+
+volumes:
+  mongodb_data_container:

@@ -5,16 +5,18 @@ using VaultSharp;
 using VaultSharp.V1.AuthMethods.Token;
 using VaultSharp.V1.AuthMethods;
 using VaultSharp.V1.Commons;
+using Microsoft.Extensions.Configuration;
 
 namespace Authentication
 {
     public class VaultService
     {
         private readonly IVaultClient _vaultClient;
+        private readonly IConfiguration _config;
 
-        public VaultService() 
+        public VaultService(IConfiguration _config) 
         {
-            var EndPoint = "https://localhost:8201/";
+            var EndPoint = _config["vaultConnectionString"];
             var httpClientHandler = new HttpClientHandler();
 
             // Tillad forbindelser til usikre HTTP-endepunkter

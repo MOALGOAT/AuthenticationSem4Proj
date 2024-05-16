@@ -9,7 +9,9 @@ using VaultSharp.V1.Commons;
 
 
 var builder = WebApplication.CreateBuilder(args);
-var vaultService = new VaultService();
+var configuration = builder.Configuration;
+
+var vaultService = new VaultService(configuration);
 
 //laves om til at hente fra vault
 //string mySecret = Environment.GetEnvironmentVariable("Secret") ?? "none";
