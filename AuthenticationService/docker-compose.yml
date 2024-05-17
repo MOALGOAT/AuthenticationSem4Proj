@@ -16,7 +16,7 @@ services:
       - auctionnetwork
 
   authenticationservice:
-    image: jakobhaulund/authenticationservice7-image:1.0.0
+    image: jakobhaulund/authenticationservice8-image:1.0.0
     ports:
       - 82:8080
     depends_on:
