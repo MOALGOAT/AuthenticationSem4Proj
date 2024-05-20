@@ -16,7 +16,7 @@ services:
       - auctionnetwork
 
   authenticationservice:
-    image: jakobhaulund/authenticationservice8-image:1.0.0
+    image: rasmusdd/authenticationservice-image:1.0.0
     ports:
       - 82:8080
     depends_on:
@@ -33,7 +33,7 @@ services:
     command: ["/bin/sh", "-c", "sleep 20 && dotnet Authentication.dll"]
 
   userservice:
-    image: rasmusdd/userservice3-image:1.0.0
+    image: jakobhaulund/bruger-service-image:1.0.0
     ports:
       - 80:8080
     depends_on:
