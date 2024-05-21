@@ -141,7 +141,7 @@ namespace Authentication.Controllers
         }
         catch (Exception ex)
         {
-            _logger.LogError("Fejl ved hentning af hemmelighed: {0}", ex.Message);
+            _logger.LogError("Fejl ved hentning af hemmelighedxd: {0}", ex.Message);
             _nLogger.Error(ex, "Fejl ved hentning af hemmelighed");
             return StatusCode(StatusCodes.Status500InternalServerError, "Der opstod en fejl under hentning af hemmelighed.");
         }

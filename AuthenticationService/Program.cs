@@ -29,7 +29,7 @@ try
     configuration["SecretKey"] = mySecret;
     configuration["IssuerKey"] = myIssuer;
     
-    Console.WriteLine("heyhey" + myIssuer);
+    Console.WriteLine("heyheyfurkanturk" + myIssuer);
     Console.WriteLine("asdad" + mySecret);
 
     builder.Services.AddTransient<VaultService>();
