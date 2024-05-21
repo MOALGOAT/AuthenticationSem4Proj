@@ -38,8 +38,10 @@ namespace Authentication.Controllers
         _userService = userService;
 
         // Hent hemmeligheden og udstederen fra Vault
-        secret = _vaultService.GetSecretAsync("secrets", "SecretKey").ToString();
+        secret = _vaultService.GetSecretAsync("secrets", "SecretKey").ToString(); 
+        _logger.LogInformation("Secret: {0}", secret);
         issuer = _vaultService.GetSecretAsync("secrets", "IssuerKey").ToString();
+        _logger.LogInformation("Issuer: {0}", issuer);
     }
 
     private string GenerateJwtToken(string username, string issuer, string secret)
