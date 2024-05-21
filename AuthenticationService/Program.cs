@@ -31,6 +31,7 @@ try
     Console.WriteLine("asdad" + mySecret);
 
     builder.Services.AddTransient<VaultService>();
+    builder.Services.AddTransient<MongoDBContext>();
     builder.Services.AddTransient<IUserInterface, UserMongoDBService>();
     builder.Services.AddAuthentication(options =>
     {
