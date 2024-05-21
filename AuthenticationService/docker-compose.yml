@@ -16,7 +16,7 @@ services:
       - auctionnetwork
 
   authenticationservice:
-    image: rasmusdd/authenticationservice-image:1.0.0
+    image: rasmusdd/authenticationservice-image:latest
     ports:
       - 82:8080
     depends_on:
