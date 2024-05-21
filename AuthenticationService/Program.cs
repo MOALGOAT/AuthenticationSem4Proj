@@ -9,6 +9,9 @@ using VaultSharp.V1.AuthMethods;
 using VaultSharp.V1.Commons;
 using NLog;
 using NLog.Web;
+using Authentication.Service;
+using Authentication.Models;
+
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings()
     .GetCurrentClassLogger();
@@ -28,6 +31,7 @@ try
     Console.WriteLine("asdad" + mySecret);
 
     builder.Services.AddTransient<VaultService>();
+    builder.Services.AddTransient<IUserInterface, UserMongoDBService>();
     builder.Services.AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
