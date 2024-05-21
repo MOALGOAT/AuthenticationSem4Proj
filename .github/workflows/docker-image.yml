@@ -28,10 +28,10 @@ jobs:
       env: 
         DOCKER_USER: ${{ secrets.DOCKER_USER }}
       run: |
-        docker build . -f AuthenticationService/Dockerfile -t ${DOCKER_USER}/authenticationservice-image:1.0.0
+        docker build . -f AuthenticationService/Dockerfile -t ${DOCKER_USER}/authenticationservice-image:latest
 
     - name: Push Docker image to Docker Hub
       env: 
         DOCKER_USER: ${{ secrets.DOCKER_USER }}
       run: |
-        docker push ${DOCKER_USER}/authenticationservice-image:1.0.0
+        docker push ${DOCKER_USER}/authenticationservice-image:latest
