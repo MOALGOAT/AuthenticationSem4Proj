@@ -83,7 +83,7 @@ namespace Authentication.Controllers
             _logger.LogError(err);
             return StatusCode(StatusCodes.Status500InternalServerError, err);
         }
-
+            _logger.LogInformation("Login forsøgt med brugernavn: {0}", login.username);
         if (login != null && !string.IsNullOrEmpty(login.username) && !string.IsNullOrEmpty(login.password))
         {
             try
