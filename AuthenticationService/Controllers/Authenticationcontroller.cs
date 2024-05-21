@@ -30,7 +30,7 @@ namespace Authentication.Controllers
     private string secret;
     private string issuer;
 
-    public AuthenticationController(ILogger<AuthenticationController> logger, IConfiguration config, VaultService vault, IUserInterface userService)
+    public  AuthenticationController(ILogger<AuthenticationController> logger, IConfiguration config, VaultService vault, IUserInterface userService)
     {
         _config = config;
         _logger = logger;
@@ -38,9 +38,9 @@ namespace Authentication.Controllers
         _userService = userService;
 
         // Hent hemmeligheden og udstederen fra Vault
-        secret = _vaultService.GetSecretAsync("secrets", "SecretKey").ToString(); 
+        secret = config["SecretKey"] ?? "noSecret";
         _logger.LogInformation("Secret: {0}", secret);
-        issuer = _vaultService.GetSecretAsync("secrets", "IssuerKey").ToString();
+        issuer = config["IssuerKey"] ?? "noIssuer";
         _logger.LogInformation("Issuer: {0}", issuer);
     }
 

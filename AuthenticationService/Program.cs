@@ -26,7 +26,9 @@ try
 
     string mySecret = await vaultService.GetSecretAsync("secrets", "SecretKey");
     string myIssuer = await vaultService.GetSecretAsync("secrets", "IssuerKey");
-
+    configuration["SecretKey"] = mySecret;
+    configuration["IssuerKey"] = myIssuer;
+    
     Console.WriteLine("heyhey" + myIssuer);
     Console.WriteLine("asdad" + mySecret);
 
