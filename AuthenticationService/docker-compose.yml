@@ -25,7 +25,7 @@ services:
       - ConnectionString=mongodb://admin:1234@mongodb:27017
       - DatabaseName=4SemProj
       - collectionName=Bruger
-      - vaultConnectionString=https://vault_dev:8201
+      - vaultConnectionString=https://vaulthost:8201
     container_name: authenticationservice
     hostname: authenticationservice
     networks:
