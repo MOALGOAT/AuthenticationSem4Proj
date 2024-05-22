@@ -55,7 +55,7 @@ namespace Authentication.Controllers
 
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-            var claims = new[]
+            var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, username),
                 new Claim(ClaimTypes.Role, role.ToString())
@@ -68,10 +68,10 @@ namespace Authentication.Controllers
                 expires: DateTime.Now.AddHours(1),
                 signingCredentials: credentials);
 
-                var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
-                _logger.LogInformation("Generated Token: {0}", tokenString);
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+            _logger.LogInformation("Generated Token: {0}", tokenString);
 
-            return tokenString;  // lav dette tilbage hvis det ikke virker
+            return tokenString;
         }
 
         [AllowAnonymous]
