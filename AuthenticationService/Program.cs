@@ -12,7 +12,6 @@ using NLog.Web;
 using Authentication.Service;
 using Authentication.Models;
 
-
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings()
     .GetCurrentClassLogger();
 logger.Debug("init main");
@@ -35,12 +34,13 @@ try
     builder.Services.AddTransient<VaultService>();
     builder.Services.AddTransient<MongoDBContext>();
     builder.Services.AddTransient<IUserInterface, UserMongoDBService>();
+
+    // Configure JWT Authentication
     builder.Services.AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
         options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     })
-
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters()
@@ -51,9 +51,14 @@ try
             ValidateIssuerSigningKey = true,
             ValidIssuer = myIssuer,
             ValidAudience = "http://localhost",
-            IssuerSigningKey =
-            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(mySecret))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(mySecret))
         };
+    });
+
+    builder.Services.AddAuthorization(options =>
+    {
+        options.AddPolicy("UserRolePolicy", policy => policy.RequireRole("1"));
+        options.AddPolicy("AdminRolePolicy", policy => policy.RequireRole("2"));
     });
 
     builder.Services.AddCors(options =>
@@ -82,7 +87,7 @@ try
 
     app.UseHttpsRedirection();
     app.UseCors("AllowOrigin");
-    app.UseAuthentication();
+    app.UseAuthentication();  // Ensure this is before UseAuthorization
     app.UseAuthorization();
     app.MapControllers();
     app.Run();

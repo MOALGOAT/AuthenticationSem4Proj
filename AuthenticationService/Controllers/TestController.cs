@@ -1,11 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using Authentication.Models;
+using System.Threading.Tasks;
 
 namespace Authentication.Controllers
 {
@@ -13,6 +9,13 @@ namespace Authentication.Controllers
     [Route("[controller]")] 
     public class TestController : Controller
     {
+        private readonly ILogger<TestController> _logger;
+
+        public TestController(ILogger<TestController> logger)
+        {
+            _logger = logger;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -44,6 +47,5 @@ namespace Authentication.Controllers
         {
             return Ok("You are an admin");
         }
-
     }
 }
