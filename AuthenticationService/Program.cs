@@ -11,6 +11,7 @@ using NLog;
 using NLog.Web;
 using Authentication.Service;
 using Authentication.Models;
+using Microsoft.Extensions.Logging;
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings()
     .GetCurrentClassLogger();
@@ -63,7 +64,7 @@ try
                 if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
                 {
                     context.Response.Headers.Add("Token-Expired", "true");
-                    logger.LogError("Token expired: {0}", context.Exception.Message);
+                    logger.Error("Token expired: {0}", context.Exception.Message);
                 }
                 return Task.CompletedTask;
             }
