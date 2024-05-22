@@ -65,10 +65,13 @@ namespace Authentication.Controllers
                 issuer,
                 "http://localhost/",
                 claims,
-                expires: DateTime.Now.AddMinutes(15),
+                expires: DateTime.Now.AddHours(1),
                 signingCredentials: credentials);
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+                var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+                _logger.LogInformation("Generated Token: {0}", tokenString);
+
+            return tokenString;  // lav dette tilbage hvis det ikke virker
         }
 
         [AllowAnonymous]

@@ -51,7 +51,22 @@ try
             ValidateIssuerSigningKey = true,
             ValidIssuer = myIssuer,
             ValidAudience = "http://localhost",
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(mySecret))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(mySecret)),
+            ClockSkew = TimeSpan.Zero // hmmmmmm
+        };
+
+        // Tilføj event handler for OnAuthenticationFailed
+        options.Events = new JwtBearerEvents
+        {
+            OnAuthenticationFailed = context =>
+            {
+                if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+                {
+                    context.Response.Headers.Add("Token-Expired", "true");
+                    logger.LogError("Token expired: {0}", context.Exception.Message);
+                }
+                return Task.CompletedTask;
+            }
         };
     });
 
