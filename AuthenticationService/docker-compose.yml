@@ -7,7 +7,7 @@ services:
       - 82:8080
     environment:
       - vaultConnectionString=https://vaulthost:8201
-      - ConnectionString=mongodb://admin:1234@userservice:27017/4SemProj
+      - ConnectionString=mongodb://admin:1234@userservice:27019/4SemProj
       - DatabaseName=4SemProj
       - collectionName=Bruger
     container_name: authenticationservice
