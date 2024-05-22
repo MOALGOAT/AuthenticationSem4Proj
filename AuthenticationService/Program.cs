@@ -27,9 +27,9 @@ try
     string myIssuer = await vaultService.GetSecretAsync("secrets", "IssuerKey");
     configuration["SecretKey"] = mySecret;
     configuration["IssuerKey"] = myIssuer;
-    
-    Console.WriteLine("heyheyfurkanturk" + myIssuer);
-    Console.WriteLine("asdad" + mySecret);
+
+    Console.WriteLine("Issuer: " + myIssuer);
+    Console.WriteLine("Secret: " + mySecret);
 
     builder.Services.AddTransient<VaultService>();
     builder.Services.AddTransient<MongoDBContext>();

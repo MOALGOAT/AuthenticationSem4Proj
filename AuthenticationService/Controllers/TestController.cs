@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 
 namespace Authentication.Controllers
 {
     [ApiController]
-    [Route("[controller]")] 
-    public class TestController : Controller
+    [Route("[controller]")]
+    public class TestController : ControllerBase
     {
         private readonly ILogger<TestController> _logger;
 
@@ -16,14 +16,9 @@ namespace Authentication.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        [Authorize]
         [HttpGet("authorized")]
-        public async Task<IActionResult> Get()
+        [Authorize]
+        public async Task<IActionResult> GetAuthorized()
         {
             return Ok("You are authorized");
         }
@@ -34,17 +29,19 @@ namespace Authentication.Controllers
             return Unauthorized("You're not authorized");
         }
 
-        [Authorize(Roles = "1")]
         [HttpGet("user")]
+        [Authorize(Roles = "1")]
         public async Task<IActionResult> GetUser()
         {
+            _logger.LogInformation("GetUser called");
             return Ok("You are a normal user");
         }
 
-        [Authorize(Roles = "2")]
         [HttpGet("admin")]
+        [Authorize(Roles = "2")]
         public async Task<IActionResult> GetAdmin()
         {
+            _logger.LogInformation("GetAdmin called");
             return Ok("You are an admin");
         }
     }
