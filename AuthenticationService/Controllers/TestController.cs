@@ -31,5 +31,19 @@ namespace Authentication.Controllers
             return Unauthorized("You're not authorized");
         }
 
+        [Authorize(Roles = "1")]
+        [HttpGet("user")]
+        public async Task<IActionResult> GetUser()
+        {
+            return Ok("You are a normal user");
+        }
+
+        [Authorize(Roles = "2")]
+        [HttpGet("admin")]
+        public async Task<IActionResult> GetAdmin()
+        {
+            return Ok("You are an admin");
+        }
+
     }
 }
