@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Http;
 using NLog;
 using VaultSharp.V1.SecretsEngines.Database;
 using Authentication.Service;
+using Models;
 
 namespace Authentication.Controllers
 {
@@ -77,7 +78,7 @@ namespace Authentication.Controllers
 
         [AllowAnonymous]
         [HttpPost("loginuser")]
-        public async Task<IActionResult> LoginUser([FromBody] User user)
+        public async Task<IActionResult> LoginUser([FromBody] LoginDTO user)
         {
             _logger.LogInformation("Attempting to log in user {Username}", user.username);
 
@@ -86,7 +87,8 @@ namespace Authentication.Controllers
             {
                 try
                 {
-                    if (user.role == 1)
+                    //if (user.role == 1)
+                    if (true)
                     {
                         var token = GenerateJwtToken(user.username, issuer, secret, 1);
                         LogIPAddress();
@@ -114,7 +116,7 @@ namespace Authentication.Controllers
 
         [AllowAnonymous]
         [HttpPost("loginadmin")]
-        public async Task<IActionResult> LoginAdmin([FromBody] User user)
+        public async Task<IActionResult> LoginAdmin([FromBody] LoginDTO user)
         {
             _logger.LogInformation("Attempting to log in admin user {Username}", user.username);
 
@@ -123,7 +125,8 @@ namespace Authentication.Controllers
             {
                 try
                 {
-                    if (user.role == 2)
+                    //if (user.role == 2)
+                    if(true)
                     {
                         var token = GenerateJwtToken(user.username, issuer, secret, 2);
                         LogIPAddress();
