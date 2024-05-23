@@ -8,7 +8,6 @@ services:
     environment:
       - vaultConnectionString=https://vaulthost:8201
       - userservicehost=http://userservice:8080
-      - ConnectionString=${ConnectionString}
     container_name: authenticationservice
     hostname: authenticationservice
     networks:
@@ -21,7 +20,6 @@ services:
       - 80:8080
     environment:
       - vaultConnectionString=https://vaulthost:8201
-      - ConnectionString=${ConnectionString}
       - DatabaseName=4SemProj
       - collectionName=Bruger
     container_name: userservice 
@@ -35,7 +33,6 @@ services:
       - 81:8080 #gør det noget, at de er ens?
     environment:
       - vaultConnectionString=https://vaulthost:8201
-      - ConnectionString=${ConnectionString}
       - DatabaseName=4SemProj
       - collectionName=Katalog
     container_name: catalogservice
