@@ -25,12 +25,12 @@ namespace Authentication.Service
             return response;
         }
 
-        public async Task<bool> ValidateUser(LoginDTO user)
+        public async Task<User> ValidateUser(LoginDTO user)
         {
             _logger.LogInformation("Validating user: {@User}", user);
             var userServiceResponse = await _client.PostAsJsonAsync("api/user/validate", user);
             userServiceResponse.EnsureSuccessStatusCode();
-            return await userServiceResponse.Content.ReadFromJsonAsync<bool>();
+            return await userServiceResponse.Content.ReadFromJsonAsync<User>();
         } 
     }
 }

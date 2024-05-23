@@ -82,35 +82,26 @@ namespace Authentication.Controllers
         {
             _logger.LogInformation("Attempting to log in user {Username}", user.username);
 
-            var isValidUser = await _userService.ValidateUser(user);
-            if (isValidUser)
+            var validUser = await _userService.ValidateUser(user);
+            try
             {
-                try
+                if (validUser.role == 1)
                 {
-                    //if (user.role == 1)
-                    if (true)
-                    {
-                        var token = GenerateJwtToken(user.username, issuer, secret, 1);
-                        LogIPAddress();
-                        _logger.LogInformation("User {Username} logged in successfully", user.username);
-                        return Ok(new { token });
-                    }
-                    else
-                    {
-                        _logger.LogWarning("Invalid role for user {Username}. Login attempt rejected.", user.username);
-                        return Unauthorized("Invalid username or password.");
-                    }
+                    var token = GenerateJwtToken(user.username, issuer, secret, 1);
+                    LogIPAddress();
+                    _logger.LogInformation("User {Username} logged in successfully", user.username);
+                    return Ok(new { token });
                 }
-                catch (Exception ex)
+                else
                 {
-                    _logger.LogError(ex, "Error occurred while generating JWT token: {Message}", ex.Message);
-                    return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred during login.");
+                    _logger.LogWarning("Invalid role for user {Username}. Login attempt rejected.", user.username);
+                    return Unauthorized("Invalid username or password.");
                 }
             }
-            else
+            catch (Exception ex)
             {
-                _logger.LogWarning("Invalid username or password provided for user {Username}. Login attempt rejected.", user.username);
-                return Unauthorized("Invalid username or password.");
+                _logger.LogError(ex, "Error occurred while generating JWT token: {Message}", ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred during login.");
             }
         }
 
@@ -120,35 +111,27 @@ namespace Authentication.Controllers
         {
             _logger.LogInformation("Attempting to log in admin user {Username}", user.username);
 
-            var isValidUser = await _userService.ValidateUser(user);
-            if (isValidUser)
+            var validUser = await _userService.ValidateUser(user);
+
+            try
             {
-                try
+                if (validUser.role == 2)
                 {
-                    //if (user.role == 2)
-                    if(true)
-                    {
-                        var token = GenerateJwtToken(user.username, issuer, secret, 2);
-                        LogIPAddress();
-                        _logger.LogInformation("Admin user {Username} logged in successfully", user.username);
-                        return Ok(new { token });
-                    }
-                    else
-                    {
-                        _logger.LogWarning("Invalid role for admin user {Username}. Login attempt rejected.", user.username);
-                        return Unauthorized("Invalid username or password.");
-                    }
+                    var token = GenerateJwtToken(user.username, issuer, secret, 2);
+                    LogIPAddress();
+                    _logger.LogInformation("Admin user {Username} logged in successfully", user.username);
+                    return Ok(new { token });
                 }
-                catch (Exception ex)
+                else
                 {
-                    _logger.LogError(ex, "Error occurred while generating JWT token: {Message}", ex.Message);
-                    return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred during login.");
+                    _logger.LogWarning("Invalid role for admin user {Username}. Login attempt rejected.", user.username);
+                    return Unauthorized("Invalid username or password.");
                 }
             }
-            else
+            catch (Exception ex)
             {
-                _logger.LogWarning("Invalid username or password provided for admin user {Username}. Login attempt rejected.", user.username);
-                return Unauthorized("Invalid username or password.");
+                _logger.LogError(ex, "Error occurred while generating JWT token: {Message}", ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred during login.");
             }
         }
 
