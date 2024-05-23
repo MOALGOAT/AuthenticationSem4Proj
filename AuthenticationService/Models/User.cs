@@ -7,19 +7,23 @@ namespace Authentication.Models
     {
         [BsonId]
         public Guid _id { get; set; }
-        public string firstName { get; set; }
+        public string? firstName { get; set; }
 
-        public string lastName { get; set; }
-        public string email { get; set; }
+        public string? lastName { get; set; }
+        public string? email { get; set; }
 
-        public string adress { get; set; }
+        public string? adress { get; set; }
 
-        public string telephonenumber { get; set; }
+        public string? telephonenumber { get; set; }
 
-        public int role { get; set; }
+        public int? role { get; set; } = 1;
 
-        public string username { get; set; }
+        public string? username { get; set; }
 
-        public string password { get; set; }
+        public string? password { get; set; }
+
+        public User()
+        {
+        }
     }
 }
