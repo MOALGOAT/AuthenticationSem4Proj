@@ -76,39 +76,42 @@ namespace Authentication.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("loginuser")]
-        public async Task<IActionResult> LoginUser([FromBody] User user)
-        {
-            var isValidUser = await _userService.ValidateUser(user);
-            if (isValidUser)
-            {
-                try
-                {
+[HttpPost("loginuser")]
+public async Task<IActionResult> LoginUser([FromBody] User user)
+{
+    _logger.LogInformation("Attempting to log in user {Username}", user.username);
 
-                    if (user.role == 1)
-                    {
-                        var token = GenerateJwtToken(user.username, issuer, secret, 1);
-                        LogIPAddress();
-                        return Ok(new { token });
-                    }
-                    else
-                    {
-                        return Unauthorized("Invalid username or ppassword.");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError("Fejl ved generering af JWT-token: {0}", ex.Message);
-                    _nLogger.Error(ex, "Fejl ved generering af JWT-token");
-                    return StatusCode(StatusCodes.Status500InternalServerError, "Der opstod en fejl under login.");
-                }
+    var isValidUser = await _userService.ValidateUser(user);
+    if (isValidUser)
+    {
+        try
+        {
+            if (user.role == 1)
+            {
+                var token = GenerateJwtToken(user.username, issuer, secret, 1);
+                LogIPAddress();
+                _logger.LogInformation("User {Username} logged in successfully", user.username);
+                return Ok(new { token });
             }
             else
             {
+                _logger.LogWarning("Invalid role for user {Username}. Login attempt rejected.", user.username);
                 return Unauthorized("Invalid username or password.");
-
             }
         }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error occurred while generating JWT token: {Message}", ex.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred during login.");
+        }
+    }
+    else
+    {
+        _logger.LogWarning("Invalid username or password provided for user {Username}. Login attempt rejected.", user.username);
+        return Unauthorized("Invalid username or password.");
+    }
+}
+
 
         [AllowAnonymous]
         [HttpPost("loginadmin")]
