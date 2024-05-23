@@ -12,7 +12,7 @@ namespace Authentication.Models
     Task<Guid> AddUser(User user);
     Task<long> UpdateUser(User user);
     Task<long> DeleteUser(Guid _id);
-    Task<User?> ValidateUser(string username, string password);  // Add this method to the interface
+    Task<User?> ValidateUser(string username, string password, int role);  
 }
 
 public class UserMongoDBService : IUserInterface
@@ -65,10 +65,11 @@ public class UserMongoDBService : IUserInterface
         return result.DeletedCount;
     }
 
-    public async Task<User?> ValidateUser(string username, string password)
+    public async Task<User?> ValidateUser(string username, string password, int role)
     {
         var filter = Builders<User>.Filter.Eq(x => x.username, username) &
-                     Builders<User>.Filter.Eq(x => x.password, password);  // Assumes passwords are stored in plain text
+                     Builders<User>.Filter.Eq(x => x.password, password) &
+                     Builders<User>.Filter.Eq(x => x.role, role);  // Assumes passwords are stored in plain text
         return await _userCollection.Find(filter).FirstOrDefaultAsync();
     }
 }

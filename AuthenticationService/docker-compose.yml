@@ -7,7 +7,7 @@ services:
       - 82:8080
     environment:
       - vaultConnectionString=https://vaulthost:8201
-      - uservicehost=http://userservice:8080
+      - userservicehost=http://userservice:8080
     container_name: authenticationservice
     hostname: authenticationservice
     networks:
@@ -18,8 +18,27 @@ services:
     image: jakobhaulund/bruger-service-image:latest
     ports:
       - 80:8080
-    container_name: userservice
+    environment:
+      - vaultConnectionString=https://vaulthost:8201
+      - ConnectionString=${ConnectionString}
+      - DatabaseName=4SemProj
+      - collectionName=Bruger
+    container_name: userservice 
     hostname: userservice
+    networks:
+      - auctionnetwork
+
+  catalogservice:
+    image: rasmusdd/catalogservicegit-image:latest
+    ports:
+      - 81:8080 #gør det noget, at de er ens?
+    environment:
+      - vaultConnectionString=https://vaulthost:8201
+      - ConnectionString=${ConnectionString}
+      - DatabaseName=4SemProj
+      - collectionName=Katalog
+    container_name: catalogservice
+    hostname: catalogservice
     networks:
       - auctionnetwork
 
