@@ -22,6 +22,17 @@ namespace Authentication.Models
 
         public string? password { get; set; }
 
+        public User(string firstName, string lastName, string email, string adress, string telephonenumber, int role, string username, string password)
+        {
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.email = email;
+            this.adress = adress;
+            this.telephonenumber = telephonenumber;
+            this.role = role;
+            this.username = username;
+            this.password = password;
+        }
         public User()
         {
         }
