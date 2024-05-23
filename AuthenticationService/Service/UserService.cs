@@ -17,14 +17,14 @@ namespace Authentication.Service
 
         public async Task<HttpResponseMessage> GetUserAsync(Guid _id)
         {
-            var response = await _client.GetAsync($"/api/user/getuser/{_id}");
+            var response = await _client.GetAsync($"/user/getuser/{_id}");
             response.EnsureSuccessStatusCode();
             return response;
         }
 
         public async Task<bool> ValidateUser(User user)
         {
-            var userServiceResponse = await _client.PostAsJsonAsync("/api/user/login/validate", user);
+            var userServiceResponse = await _client.PostAsJsonAsync("/user/login/validate", user);
             userServiceResponse.EnsureSuccessStatusCode();
             return await userServiceResponse.Content.ReadFromJsonAsync<bool>();
         } 
