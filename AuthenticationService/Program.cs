@@ -91,7 +91,7 @@ try
         });
     });
 
-    var userServiceUrl = Environment.GetEnvironmentVariable("UserServiceUrl");
+    var userServiceUrl = Environment.GetEnvironmentVariable("userservicehost");
     if(string.IsNullOrEmpty(userServiceUrl))
     {
         logger.Error("UserServiceUrl not found in environment variables");
@@ -130,7 +130,7 @@ try
 }
 catch (Exception ex)
 {
-    logger.Error(ex, "Stopped program because of eeeewueueuexception");
+    logger.Error(ex, "Stopped program because of exception");
     throw;
 }
 finally
