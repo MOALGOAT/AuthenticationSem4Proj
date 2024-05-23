@@ -37,6 +37,17 @@ try
     Console.WriteLine("Issuer: " + myIssuer);
     Console.WriteLine("Secret: " + mySecret);
 
+    string connectionString = Environment.GetEnvironmentVariable("ConnectionString");
+    if (string.IsNullOrEmpty(connectionString))
+    {
+        logger.Error("ConnectionString not found in environment variables");
+        throw new Exception("ConnectionString not found in environment variables");
+    }
+    else
+    {
+        logger.Info("ConnectionString: {0}", connectionString);
+    }
+
     builder.Services.AddTransient<VaultService>();
     builder.Services.AddTransient<MongoDBContext>();
     builder.Services.AddTransient<IUserInterface, UserMongoDBService>();
@@ -92,12 +103,12 @@ try
     });
 
     var userServiceUrl = Environment.GetEnvironmentVariable("userservicehost");
-    if(string.IsNullOrEmpty(userServiceUrl))
+    if (string.IsNullOrEmpty(userServiceUrl))
     {
         logger.Error("UserServiceUrl not found in environment variables");
         throw new Exception("UserServiceUrl not found in environment variables");
     }
-    else 
+    else
     {
         logger.Info("UserServiceUrl: {0}", userServiceUrl);
     }

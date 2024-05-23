@@ -8,6 +8,7 @@ services:
     environment:
       - vaultConnectionString=https://vaulthost:8201
       - userservicehost=http://userservice:8080
+      - ConnectionString=${ConnectionString}
     container_name: authenticationservice
     hostname: authenticationservice
     networks:
