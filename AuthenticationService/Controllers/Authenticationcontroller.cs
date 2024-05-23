@@ -75,87 +75,73 @@ namespace Authentication.Controllers
             return tokenString;
         }
 
-        [AllowAnonymous] 
+        [AllowAnonymous]
         [HttpPost("loginuser")]
         public async Task<IActionResult> LoginUser([FromBody] User user)
         {
-            if (user.username == null || user.password == null)
+            var isValidUser = await _userService.ValidateUser(user);
+            if (isValidUser)
             {
-                var err = "Fejl ved login: Brugernavn eller adgangskode er null.";
-                _logger.LogError(err);
-                return StatusCode(StatusCodes.Status400BadRequest, err);
-            }
-
-            if (secret == null || issuer == null)
-            {
-                var err = "Fejl ved login: Der opstod en fejl ved login.";
-                _logger.LogError(err);
-                return StatusCode(StatusCodes.Status500InternalServerError, err);
-            }
-
-            _logger.LogInformation("Login forsøgt med brugernavn: {0}", user.username);
-
-            try
-            {
-        
-                if (user.role == 1 )
+                try
                 {
-                    var token = GenerateJwtToken(user.username, issuer, secret, 1);
-                    LogIPAddress();
-                    return Ok(new { token });
+
+                    if (user.role == 1)
+                    {
+                        var token = GenerateJwtToken(user.username, issuer, secret, 1);
+                        LogIPAddress();
+                        return Ok(new { token });
+                    }
+                    else
+                    {
+                        return Unauthorized("Invalid username or password.");
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    return Unauthorized("Invalid username or password.");
+                    _logger.LogError("Fejl ved generering af JWT-token: {0}", ex.Message);
+                    _nLogger.Error(ex, "Fejl ved generering af JWT-token");
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Der opstod en fejl under login.");
                 }
             }
-            catch (Exception ex)
+            else
             {
-                _logger.LogError("Fejl ved generering af JWT-token: {0}", ex.Message);
-                _nLogger.Error(ex, "Fejl ved generering af JWT-token");
-                return StatusCode(StatusCodes.Status500InternalServerError, "Der opstod en fejl under login.");
+                return Unauthorized("Invalid username or password.");
+
             }
         }
 
-        [AllowAnonymous] 
+        [AllowAnonymous]
         [HttpPost("loginadmin")]
         public async Task<IActionResult> LoginAdmin([FromBody] User user)
         {
-            if (user.username == null || user.password == null)
-            {
-                var err = "Fejl ved login: Brugernavn eller adgangskode er null.";
-                _logger.LogError(err);
-                return StatusCode(StatusCodes.Status400BadRequest, err);
-            }
+            var isValidUser = await _userService.ValidateUser(user);
 
-            if (secret == null || issuer == null)
+            if (isValidUser)
             {
-                var err = "Fejl ved login: Der opstod en fejl ved login.";
-                _logger.LogError(err);
-                return StatusCode(StatusCodes.Status500InternalServerError, err);
-            }
-
-            _logger.LogInformation("Login forsøgt med brugernavn: {0}", user.username);
-
-            try
-            {
-        
-                if (user.role == 2 )
+                try
                 {
-                    var token = GenerateJwtToken(user.username, issuer, secret, 1);
-                    LogIPAddress();
-                    return Ok(new { token });
+
+                    if (user.role == 2)
+                    {
+                        var token = GenerateJwtToken(user.username, issuer, secret, 1);
+                        LogIPAddress();
+                        return Ok(new { token });
+                    }
+                    else
+                    {
+                        return Unauthorized("Invalid username or password.");
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    return Unauthorized("Invalid username or password.");
+                    _logger.LogError("Fejl ved generering af JWT-token: {0}", ex.Message);
+                    _nLogger.Error(ex, "Fejl ved generering af JWT-token");
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Der opstod en fejl under login.");
                 }
             }
-            catch (Exception ex)
+            else
             {
-                _logger.LogError("Fejl ved generering af JWT-token: {0}", ex.Message);
-                _nLogger.Error(ex, "Fejl ved generering af JWT-token");
-                return StatusCode(StatusCodes.Status500InternalServerError, "Der opstod en fejl under login.");
+                return Unauthorized("Invalid username or password.");
             }
         }
 
