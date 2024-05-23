@@ -20,7 +20,7 @@ services:
       - 80:8080
     environment:
       - vaultConnectionString=https://vaulthost:8201
-      - DatabaseName=4SemProj
+      - DatabaseName=Sem4Proj
       - collectionName=Bruger
     container_name: userservice 
     hostname: userservice
@@ -33,7 +33,7 @@ services:
       - 81:8080 #gør det noget, at de er ens?
     environment:
       - vaultConnectionString=https://vaulthost:8201
-      - DatabaseName=4SemProj
+      - DatabaseName=Sem4Proj
       - collectionName=Katalog
     container_name: catalogservice
     hostname: catalogservice

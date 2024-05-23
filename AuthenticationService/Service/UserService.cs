@@ -9,10 +9,12 @@ namespace Authentication.Service
     public class UserService : IUserService
     {
         private readonly HttpClient _client;
+        private readonly ILogger<UserService> _logger;
 
-        public UserService(HttpClient client)
+        public UserService(HttpClient client, ILogger<UserService> logger)
         {
             _client = client;
+            _logger = logger;
         }
 
         public async Task<HttpResponseMessage> GetUserAsync(Guid _id)
@@ -24,6 +26,7 @@ namespace Authentication.Service
 
         public async Task<bool> ValidateUser(User user)
         {
+            _logger.LogInformation("Validating user: {@User}", user);
             var userServiceResponse = await _client.PostAsJsonAsync("api/user/validate", user);
             userServiceResponse.EnsureSuccessStatusCode();
             return await userServiceResponse.Content.ReadFromJsonAsync<bool>();
