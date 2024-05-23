@@ -17,6 +17,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Http;
 using NLog;
 using VaultSharp.V1.SecretsEngines.Database;
+using Authentication.Service;
 
 namespace Authentication.Controllers
 {
@@ -27,12 +28,12 @@ namespace Authentication.Controllers
         private readonly ILogger<AuthenticationController> _logger;
         private readonly IConfiguration _config;
         private readonly VaultService _vaultService;
-        private readonly IUserInterface _userService;
+        private readonly IUserService _userService;
         private static readonly Logger _nLogger = LogManager.GetCurrentClassLogger();
         private string secret;
         private string issuer;
 
-        public AuthenticationController(ILogger<AuthenticationController> logger, IConfiguration config, VaultService vault, IUserInterface userService)
+        public AuthenticationController(ILogger<AuthenticationController> logger, IConfiguration config, VaultService vault, IUserService userService)
         {
             _config = config;
             _logger = logger;
@@ -74,11 +75,11 @@ namespace Authentication.Controllers
             return tokenString;
         }
 
-        [AllowAnonymous]
+        [AllowAnonymous] //lav en loginuser og en loginadmin
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginModel login)
+        public async Task<IActionResult> Login([FromBody] User user)
         {
-            if (login.username == null || login.password == null)
+            if (user.username == null || user.password == null)
             {
                 var err = "Fejl ved login: Brugernavn eller adgangskode er null.";
                 _logger.LogError(err);
@@ -92,14 +93,14 @@ namespace Authentication.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, err);
             }
 
-            _logger.LogInformation("Login forsøgt med brugernavn: {0}", login.username);
+            _logger.LogInformation("Login forsøgt med brugernavn: {0}", user.username);
 
             try
             {
-                var user = await _userService.ValidateUser(login.username, login.password);
+                var validUser = await _userService.ValidateUser(user);
                 if (user != null)
                 {
-                    var token = GenerateJwtToken(login.username, issuer, secret, user.role);
+                    var token = GenerateJwtToken(user.username, issuer, secret, user.role);
                     LogIPAddress();
                     return Ok(new { token });
                 }
