@@ -77,9 +77,9 @@ namespace Authentication.Controllers
 
         [AllowAnonymous] //lav en loginuser og en loginadmin
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] User user)
+        public async Task<IActionResult> Login([FromBody] string username, string password)
         {
-            if (user.username == null || user.password == null)
+            if (username == null || password == null)
             {
                 var err = "Fejl ved login: Brugernavn eller adgangskode er null.";
                 _logger.LogError(err);
@@ -93,14 +93,14 @@ namespace Authentication.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, err);
             }
 
-            _logger.LogInformation("Login forsøgt med brugernavn: {0}", user.username);
+            _logger.LogInformation("Login forsøgt med brugernavn: {0}", username);
 
             try
             {
-                var validUser = await _userService.ValidateUser(user);
-                if (user != null)
+        
+                if (username != null)
                 {
-                    var token = GenerateJwtToken(user.username, issuer, secret, user.role);
+                    var token = GenerateJwtToken(username, issuer, secret, 1);
                     LogIPAddress();
                     return Ok(new { token });
                 }
