@@ -76,94 +76,97 @@ namespace Authentication.Controllers
         }
 
         [AllowAnonymous]
-[HttpPost("loginuser")]
-public async Task<IActionResult> LoginUser([FromBody] User user)
-{
-    _logger.LogInformation("Attempting to log in user {Username}", user.username);
-
-    var isValidUser = await _userService.ValidateUser(user);
-    if (isValidUser)
-    {
-        try
+        [HttpPost("loginuser")]
+        public async Task<IActionResult> LoginUser([FromBody] User user)
         {
-            if (user.role == 1)
-            {
-                var token = GenerateJwtToken(user.username, issuer, secret, 1);
-                LogIPAddress();
-                _logger.LogInformation("User {Username} logged in successfully", user.username);
-                return Ok(new { token });
-            }
-            else
-            {
-                _logger.LogWarning("Invalid role for user {Username}. Login attempt rejected.", user.username);
-                return Unauthorized("Invalid username or password.");
-            }
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error occurred while generating JWT token: {Message}", ex.Message);
-            return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred during login.");
-        }
-    }
-    else
-    {
-        _logger.LogWarning("Invalid username or password provided for user {Username}. Login attempt rejected.", user.username);
-        return Unauthorized("Invalid username or password.");
-    }
-}
+            _logger.LogInformation("Attempting to log in user {Username}", user.username);
 
-
-        [AllowAnonymous]
-        [HttpPost("loginadmin")]
-        public async Task<IActionResult> LoginAdmin([FromBody] User user)
-        {
             var isValidUser = await _userService.ValidateUser(user);
-
             if (isValidUser)
             {
                 try
                 {
-
-                    if (user.role == 2)
+                    if (user.role == 1)
                     {
                         var token = GenerateJwtToken(user.username, issuer, secret, 1);
                         LogIPAddress();
+                        _logger.LogInformation("User {Username} logged in successfully", user.username);
                         return Ok(new { token });
                     }
                     else
                     {
+                        _logger.LogWarning("Invalid role for user {Username}. Login attempt rejected.", user.username);
                         return Unauthorized("Invalid username or password.");
                     }
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError("Fejl ved generering af JWT-token: {0}", ex.Message);
-                    _nLogger.Error(ex, "Fejl ved generering af JWT-token");
-                    return StatusCode(StatusCodes.Status500InternalServerError, "Der opstod en fejl under login.");
+                    _logger.LogError(ex, "Error occurred while generating JWT token: {Message}", ex.Message);
+                    return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred during login.");
                 }
             }
             else
             {
+                _logger.LogWarning("Invalid username or password provided for user {Username}. Login attempt rejected.", user.username);
+                return Unauthorized("Invalid username or password.");
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost("loginadmin")]
+        public async Task<IActionResult> LoginAdmin([FromBody] User user)
+        {
+            _logger.LogInformation("Attempting to log in admin user {Username}", user.username);
+
+            var isValidUser = await _userService.ValidateUser(user);
+            if (isValidUser)
+            {
+                try
+                {
+                    if (user.role == 2)
+                    {
+                        var token = GenerateJwtToken(user.username, issuer, secret, 2);
+                        LogIPAddress();
+                        _logger.LogInformation("Admin user {Username} logged in successfully", user.username);
+                        return Ok(new { token });
+                    }
+                    else
+                    {
+                        _logger.LogWarning("Invalid role for admin user {Username}. Login attempt rejected.", user.username);
+                        return Unauthorized("Invalid username or password.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error occurred while generating JWT token: {Message}", ex.Message);
+                    return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred during login.");
+                }
+            }
+            else
+            {
+                _logger.LogWarning("Invalid username or password provided for admin user {Username}. Login attempt rejected.", user.username);
                 return Unauthorized("Invalid username or password.");
             }
         }
 
         [HttpGet("authorized")]
         [Authorize]
-        public async Task<IActionResult> GetAuthorized()
+        public IActionResult GetAuthorized()
         {
+            _logger.LogInformation("Authorized endpoint called");
             return Ok("You are authorized");
         }
 
         [HttpGet("unauthorized")]
-        public async Task<IActionResult> GetUnauthorized()
+        public IActionResult GetUnauthorized()
         {
+            _logger.LogInformation("Unauthorized endpoint called");
             return Unauthorized("You're not authorized");
         }
 
         [HttpGet("user")]
         [Authorize(Roles = "1")]
-        public async Task<IActionResult> GetUser()
+        public IActionResult GetUser()
         {
             _logger.LogInformation("GetUser called");
             return Ok("You are a normal user");
@@ -171,7 +174,7 @@ public async Task<IActionResult> LoginUser([FromBody] User user)
 
         [HttpGet("admin")]
         [Authorize(Roles = "2")]
-        public async Task<IActionResult> GetAdmin()
+        public IActionResult GetAdmin()
         {
             _logger.LogInformation("GetAdmin called");
             return Ok("You are an admin");
@@ -201,13 +204,14 @@ public async Task<IActionResult> LoginUser([FromBody] User user)
             try
             {
                 var secret = await _vaultService.GetSecretAsync("secret", "mySecret");
+                _logger.LogInformation("Secret retrieved successfully");
                 return Ok(new { mySecret = secret });
             }
             catch (Exception ex)
             {
-                _logger.LogError("Fejl ved hentning af hemmelighedxd: {0}", ex.Message);
-                _nLogger.Error(ex, "Fejl ved hentning af hemmelighed");
-                return StatusCode(StatusCodes.Status500InternalServerError, "Der opstod en fejl under hentning af hemmelighed.");
+                _logger.LogError(ex, "Error occurred while retrieving secret: {Message}", ex.Message);
+                _nLogger.Error(ex, "Error occurred while retrieving secret");
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while retrieving the secret.");
             }
         }
     }
