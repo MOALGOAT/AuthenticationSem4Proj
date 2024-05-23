@@ -31,13 +31,14 @@ try
 
     string mySecret = await vaultService.GetSecretAsync("secrets", "SecretKey");
     string myIssuer = await vaultService.GetSecretAsync("secrets", "IssuerKey");
+    
     configuration["SecretKey"] = mySecret;
     configuration["IssuerKey"] = myIssuer;
 
     Console.WriteLine("Issuer: " + myIssuer);
     Console.WriteLine("Secret: " + mySecret);
 
-    string connectionString = Environment.GetEnvironmentVariable("ConnectionString");
+    string connectionString = Environment.GetEnvironmentVariable("MongoConnectionString");
     if (string.IsNullOrEmpty(connectionString))
     {
         logger.Error("ConnectionString not found in environment variables");
