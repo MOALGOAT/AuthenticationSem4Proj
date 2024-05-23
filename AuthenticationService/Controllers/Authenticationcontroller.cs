@@ -75,11 +75,11 @@ namespace Authentication.Controllers
             return tokenString;
         }
 
-        [AllowAnonymous] //lav en loginuser og en loginadmin
-        [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] string username, string password)
+        [AllowAnonymous] 
+        [HttpPost("loginuser")]
+        public async Task<IActionResult> LoginUser([FromBody] User user)
         {
-            if (username == null || password == null)
+            if (user.username == null || user.password == null)
             {
                 var err = "Fejl ved login: Brugernavn eller adgangskode er null.";
                 _logger.LogError(err);
@@ -93,14 +93,56 @@ namespace Authentication.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, err);
             }
 
-            _logger.LogInformation("Login forsøgt med brugernavn: {0}", username);
+            _logger.LogInformation("Login forsøgt med brugernavn: {0}", user.username);
 
             try
             {
         
-                if (username != null)
+                if (user.role == 1 )
                 {
-                    var token = GenerateJwtToken(username, issuer, secret, 1);
+                    var token = GenerateJwtToken(user.username, issuer, secret, 1);
+                    LogIPAddress();
+                    return Ok(new { token });
+                }
+                else
+                {
+                    return Unauthorized("Invalid username or password.");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Fejl ved generering af JWT-token: {0}", ex.Message);
+                _nLogger.Error(ex, "Fejl ved generering af JWT-token");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Der opstod en fejl under login.");
+            }
+        }
+
+        [AllowAnonymous] 
+        [HttpPost("loginadmin")]
+        public async Task<IActionResult> LoginAdmin([FromBody] User user)
+        {
+            if (user.username == null || user.password == null)
+            {
+                var err = "Fejl ved login: Brugernavn eller adgangskode er null.";
+                _logger.LogError(err);
+                return StatusCode(StatusCodes.Status400BadRequest, err);
+            }
+
+            if (secret == null || issuer == null)
+            {
+                var err = "Fejl ved login: Der opstod en fejl ved login.";
+                _logger.LogError(err);
+                return StatusCode(StatusCodes.Status500InternalServerError, err);
+            }
+
+            _logger.LogInformation("Login forsøgt med brugernavn: {0}", user.username);
+
+            try
+            {
+        
+                if (user.role == 2 )
+                {
+                    var token = GenerateJwtToken(user.username, issuer, secret, 1);
                     LogIPAddress();
                     return Ok(new { token });
                 }
