@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Authentication.Models;
+using Models;
 
 namespace Authentication.Service
 {
@@ -24,7 +25,7 @@ namespace Authentication.Service
             return response;
         }
 
-        public async Task<bool> ValidateUser(User user)
+        public async Task<bool> ValidateUser(LoginDTO user)
         {
             _logger.LogInformation("Validating user: {@User}", user);
             var userServiceResponse = await _client.PostAsJsonAsync("api/user/validate", user);
