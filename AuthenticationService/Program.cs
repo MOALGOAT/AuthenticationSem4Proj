@@ -12,6 +12,9 @@ using NLog.Web;
 using Authentication.Service;
 using Authentication.Models;
 using Microsoft.Extensions.Logging;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
+using MongoDB.Bson;
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings()
     .GetCurrentClassLogger();
@@ -21,6 +24,8 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
     var configuration = builder.Configuration;
+
+    BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String));
 
     var vaultService = new VaultService(configuration);
 
@@ -84,6 +89,21 @@ try
             builder.AllowAnyHeader()
                    .AllowAnyMethod();
         });
+    });
+
+    var userServiceUrl = Environment.GetEnvironmentVariable("UserServiceUrl");
+    if(string.IsNullOrEmpty(userServiceUrl))
+    {
+        logger.Error("UserServiceUrl not found in environment variables");
+        throw new Exception("UserServiceUrl not found in environment variables");
+    }
+    else 
+    {
+        logger.Info("UserServiceUrl: {0}", userServiceUrl);
+    }
+    builder.Services.AddHttpClient<IUserService, UserService>(client =>
+    {
+        client.BaseAddress = new Uri(userServiceUrl);
     });
 
     builder.Services.AddControllers();
