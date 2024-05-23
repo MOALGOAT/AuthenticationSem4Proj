@@ -24,7 +24,7 @@ namespace Authentication.Service
 
         public async Task<bool> ValidateUser(User user)
         {
-            var userServiceResponse = await _client.PostAsJsonAsync("api/user/login/validate", user);
+            var userServiceResponse = await _client.PostAsJsonAsync("api/user/validate", user);
             userServiceResponse.EnsureSuccessStatusCode();
             return await userServiceResponse.Content.ReadFromJsonAsync<bool>();
         } 

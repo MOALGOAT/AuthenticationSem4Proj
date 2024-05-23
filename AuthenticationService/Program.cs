@@ -114,6 +114,7 @@ try
     {
         logger.Info("UserServiceUrl: {0}", userServiceUrl);
     }
+    
     builder.Services.AddHttpClient<IUserService, UserService>(client =>
     {
         client.BaseAddress = new Uri(userServiceUrl);
