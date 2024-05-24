@@ -15,6 +15,7 @@ using Microsoft.Extensions.Logging;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Bson;
+using Microsoft.AspNetCore.Authentication; 
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings()
     .GetCurrentClassLogger();
@@ -52,6 +53,8 @@ try
 
     builder.Services.AddTransient<VaultService>();
     builder.Services.AddTransient<MongoDBContext>();
+    
+
     builder.Services.AddTransient<IUserInterface, UserMongoDBService>();
 
     // Configure JWT Authentication
