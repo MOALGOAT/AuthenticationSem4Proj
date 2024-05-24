@@ -14,14 +14,14 @@ services:
       - auctionnetwork
     command: ["/bin/sh", "-c", "sleep 20 && dotnet Authentication.dll"]
 
-  auction-service:
-    image: jakobhaulund/auction-service-image:latest
-    ports:
-      - 84:8080
-    container_name: auction-service
-    hostname: auction-service
-    networks:
-      - auctionnetwork
+#  auction-service:
+    #image: jakobhaulund/auction-service-image:latest
+    #ports:
+     # - 84:8080
+    #container_name: auction-service
+    #hostname: auction-service
+    #networks:
+   #   - auctionnetwork
 
   userservice:
     image: jakobhaulund/bruger-service-image:latest
@@ -48,6 +48,22 @@ services:
     hostname: catalogservice
     networks:
       - auctionnetwork
+
+  #nginx:
+    #image: nginx:latest
+    #container_name: nginx
+    #ports:
+      #- "85:8080"
+#  depends_on:
+ #     - userservice
+  #    - authenticationservice
+   #   - auction-service
+    # - biddingservice
+    #  - catalogservice
+    #volumes:
+    #  - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    #networks:
+     # - auctionnetwork --!>
 
 networks:
   auctionnetwork:
