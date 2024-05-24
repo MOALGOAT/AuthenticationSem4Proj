@@ -14,6 +14,15 @@ services:
       - auctionnetwork
     command: ["/bin/sh", "-c", "sleep 20 && dotnet Authentication.dll"]
 
+  auction-service:
+    image: jakobhaulund/auction-service-image:latest
+    ports:
+      - 84:8080
+    container_name: auction-service
+    hostname: auction-service
+    networks:
+      - auctionnetwork
+
   userservice:
     image: jakobhaulund/bruger-service-image:latest
     ports:
@@ -30,7 +39,7 @@ services:
   catalogservice:
     image: rasmusdd/catalogservicegit-image:latest
     ports:
-      - 81:8080 #gør det noget, at de er ens?
+      - 81:8080 
     environment:
       - vaultConnectionString=https://vaulthost:8201
       - DatabaseName=Sem4Proj
