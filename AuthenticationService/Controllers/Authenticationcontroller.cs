@@ -61,7 +61,7 @@ namespace Authentication.Controllers
             {
                 new Claim(ClaimTypes.NameIdentifier, username),
                 new Claim(ClaimTypes.Role, role.ToString()),
-                new Claim("id", _id.ToString())
+                new Claim("_id", _id.ToString())
             };
 
             var token = new JwtSecurityToken(
