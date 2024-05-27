@@ -146,9 +146,9 @@ namespace Authentication.Controllers
 
             try
             {
-                if (validUser.role == 2)
+                if (validUser.role == 3)
                 {
-                    var token = GenerateJwtToken(user.username, issuer, secret, 2, _id: validUser._id);
+                    var token = GenerateJwtToken(user.username, issuer, secret, 3, _id: validUser._id);
                     LogIPAddress();
                     _logger.LogInformation("Admin user {Username} logged in successfully", user.username);
                     return Ok(new { token });
