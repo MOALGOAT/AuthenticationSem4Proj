@@ -138,6 +138,7 @@ namespace Authentication.Controllers
 
         [AllowAnonymous]
         [HttpPost("/api/legal/login")]
+        [Authorize(Roles = "3")]
         public async Task<IActionResult> LoginLegal([FromBody] LoginDTO user)
         {
             _logger.LogInformation("Attempting to log in admin user {Username}", user.username);
