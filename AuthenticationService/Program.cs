@@ -52,10 +52,6 @@ try
     }
 
     builder.Services.AddTransient<VaultService>();
-    // builder.Services.AddTransient<MongoDBContext>(); --------- SLET DETTE
-    
-
-    //builder.Services.AddTransient<IUserInterface, UserMongoDBService>();
 
     // Configure JWT Authentication
     builder.Services.AddAuthentication(options =>
@@ -74,10 +70,9 @@ try
             ValidIssuer = myIssuer,
             ValidAudience = "http://localhost",
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(mySecret)),
-            ClockSkew = TimeSpan.Zero // hmmmmmm
+            ClockSkew = TimeSpan.Zero // remove delay of token when expire
         };
 
-        // Tilføj event handler for OnAuthenticationFailed
         options.Events = new JwtBearerEvents
         {
             OnAuthenticationFailed = context =>
@@ -141,7 +136,7 @@ try
 
     app.UseHttpsRedirection();
     app.UseCors("AllowOrigin");
-    app.UseAuthentication();  // Ensure this is before UseAuthorization
+    app.UseAuthentication(); 
     app.UseAuthorization();
     app.MapControllers();
     

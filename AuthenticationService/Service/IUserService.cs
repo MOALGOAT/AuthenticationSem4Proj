@@ -9,7 +9,6 @@ namespace Authentication.Service
 {
     public interface IUserService
     {
-        //Task<HttpResponseMessage> GetUserAsync(Guid _id) SLET DETTE;
         Task<User> ValidateUser(LoginDTO user);
     }
 }

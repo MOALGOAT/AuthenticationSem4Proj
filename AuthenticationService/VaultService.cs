@@ -42,10 +42,8 @@ namespace Authentication
         {
             try
             {
-                // Forsøg at læse secret fra Vault
                 var kv2Secret = await _vaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync(path: path, mountPoint: "secret");
 
-                // Kontroller om secret blev fundet
                 if (kv2Secret != null && kv2Secret.Data != null && kv2Secret.Data.Data != null && kv2Secret.Data.Data.ContainsKey(key))
                 {
                     return kv2Secret.Data.Data[key].ToString();
@@ -57,12 +55,10 @@ namespace Authentication
             }
             catch (VaultApiException ex)
             {
-                // Håndter fejl fra Vault API
                 throw new Exception($"Error while retrieving secret from Vault: {ex.Message}");
             }
             catch (Exception ex)
             {
-                // Generel fejlhåndtering
                 throw new Exception($"Unexpected error: {ex.Message}");
             }
         }

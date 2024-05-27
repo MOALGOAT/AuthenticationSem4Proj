@@ -167,22 +167,6 @@ namespace Authentication.Controllers
             }
         }
 
-      /*  [HttpGet("user")]
-        [Authorize(Roles = "1")]
-        public IActionResult GetUser()
-        {
-            _logger.LogInformation("GetUser called");
-            return Ok("You are a normal user");
-        }
-
-        [HttpGet("admin")]
-        [Authorize(Roles = "2")]
-        public IActionResult GetAdmin()
-        {
-            _logger.LogInformation("GetAdmin called");
-            return Ok("You are an admin");
-        } ----------------------------- SLET DETTE */ 
-
         private void LogIPAddress()
         {
             var hostName = System.Net.Dns.GetHostName();

@@ -17,14 +17,7 @@ namespace Authentication.Service
             _client = client;
             _logger = logger;
         }
-/*
-        public async Task<HttpResponseMessage> GetUserAsync(Guid _id)
-        {
-            var response = await _client.GetAsync($"api/user/getuser/{_id}");
-            response.EnsureSuccessStatusCode();
-            return response;
-        } --------------- SLET DETTE*/
-
+        
         public async Task<User> ValidateUser(LoginDTO user)
         {
             _logger.LogInformation("Validating user: {@User}", user);
