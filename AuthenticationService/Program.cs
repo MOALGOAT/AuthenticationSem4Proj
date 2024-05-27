@@ -143,6 +143,7 @@ try
     app.UseAuthentication();  // Ensure this is before UseAuthorization
     app.UseAuthorization();
     app.MapControllers();
+    
     app.Run();
 }
 catch (Exception ex)

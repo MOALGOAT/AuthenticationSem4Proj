@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Authentication.Service;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Authentication.Controllers 
 {
@@ -22,7 +21,6 @@ namespace Authentication.Controllers
         }
 
         [HttpGet("getuser/{_id}")]
-        [Authorize(Roles = "2")]
         public async Task<IActionResult> GetUser(Guid _id)
         {
             try

@@ -48,7 +48,7 @@ namespace Authentication.Controllers
             _logger.LogInformation("Issuer: {0}", issuer);
         }
 
-        private string GenerateJwtToken(string username, string issuer, string secret, int role)
+        private string GenerateJwtToken(string username, string issuer, string secret, int role, Guid _id)
         {
             if (string.IsNullOrEmpty(username))
             {
@@ -60,7 +60,8 @@ namespace Authentication.Controllers
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, username),
-                new Claim(ClaimTypes.Role, role.ToString())
+                new Claim(ClaimTypes.Role, role.ToString()),
+                new Claim("id", _id.ToString())
             };
 
             var token = new JwtSecurityToken(
@@ -87,7 +88,7 @@ namespace Authentication.Controllers
             {
                 if (validUser.role == 1)
                 {
-                    var token = GenerateJwtToken(user.username, issuer, secret, 1);
+                    var token = GenerateJwtToken(user.username, issuer, secret, 1, _id: validUser._id);
                     LogIPAddress();
                     _logger.LogInformation("User {Username} logged in successfully", user.username);
                     return Ok(new { token });
@@ -117,7 +118,7 @@ namespace Authentication.Controllers
             {
                 if (validUser.role == 2)
                 {
-                    var token = GenerateJwtToken(user.username, issuer, secret, 2);
+                    var token = GenerateJwtToken(user.username, issuer, secret, 2, _id: validUser._id);
                     LogIPAddress();
                     _logger.LogInformation("Admin user {Username} logged in successfully", user.username);
                     return Ok(new { token });
