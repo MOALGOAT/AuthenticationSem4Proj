@@ -1,4 +1,4 @@
-using MongoDB.Driver;
+/*using MongoDB.Driver;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 
@@ -27,3 +27,4 @@ namespace Authentication.Service
             }
     }
 }
+---------------SLET DETTE*/

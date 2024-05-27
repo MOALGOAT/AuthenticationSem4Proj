@@ -167,22 +167,7 @@ namespace Authentication.Controllers
             }
         }
 
-        [HttpGet("authorized")]
-        [Authorize]
-        public IActionResult GetAuthorized()
-        {
-            _logger.LogInformation("Authorized endpoint called");
-            return Ok("You are authorized");
-        }
-
-        [HttpGet("unauthorized")]
-        public IActionResult GetUnauthorized()
-        {
-            _logger.LogInformation("Unauthorized endpoint called");
-            return Unauthorized("You're not authorized");
-        }
-
-        [HttpGet("user")]
+      /*  [HttpGet("user")]
         [Authorize(Roles = "1")]
         public IActionResult GetUser()
         {
@@ -196,7 +181,7 @@ namespace Authentication.Controllers
         {
             _logger.LogInformation("GetAdmin called");
             return Ok("You are an admin");
-        }
+        } ----------------------------- SLET DETTE */ 
 
         private void LogIPAddress()
         {
@@ -206,8 +191,8 @@ namespace Authentication.Controllers
 
             if (!string.IsNullOrEmpty(ipAddr))
             {
-                _logger.LogInformation($"XYZ Service responding from {ipAddr}");
-                _nLogger.Info($"XYZ Service responding from {ipAddr}");
+                _logger.LogInformation($"Authentication service responding from {ipAddr}");
+                _nLogger.Info($"Authentication service responding from {ipAddr}");
             }
             else
             {

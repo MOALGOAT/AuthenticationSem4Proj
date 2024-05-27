@@ -52,10 +52,10 @@ try
     }
 
     builder.Services.AddTransient<VaultService>();
-    builder.Services.AddTransient<MongoDBContext>();
+    // builder.Services.AddTransient<MongoDBContext>(); --------- SLET DETTE
     
 
-    builder.Services.AddTransient<IUserInterface, UserMongoDBService>();
+    //builder.Services.AddTransient<IUserInterface, UserMongoDBService>();
 
     // Configure JWT Authentication
     builder.Services.AddAuthentication(options =>

@@ -9,7 +9,7 @@ namespace Authentication.Service
 {
     public interface IUserService
     {
-        Task<HttpResponseMessage> GetUserAsync(Guid _id);
-        Task<User> ValidateUser(LoginDTO user); // lav så den returnerer en bruger så vi kan fiske rolle ud og bruge i login validate
+        //Task<HttpResponseMessage> GetUserAsync(Guid _id) SLET DETTE;
+        Task<User> ValidateUser(LoginDTO user);
     }
 }

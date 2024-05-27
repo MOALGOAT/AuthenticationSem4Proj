@@ -52,18 +52,18 @@ namespace Authentication
                 }
                 else
                 {
-                    throw new Exception($"Secret med nøglen '{key}' blev ikke fundet under stien '{path}'.");
+                    throw new Exception($"Secret with key '{key}' was not found in path '{path}'.");
                 }
             }
             catch (VaultApiException ex)
             {
                 // Håndter fejl fra Vault API
-                throw new Exception($"Fejl ved hentning af secret fra Vault: {ex.Message}");
+                throw new Exception($"Error while retrieving secret from Vault: {ex.Message}");
             }
             catch (Exception ex)
             {
                 // Generel fejlhåndtering
-                throw new Exception($"Der opstod en uventet fejl: {ex.Message}");
+                throw new Exception($"Unexpected error: {ex.Message}");
             }
         }
 
