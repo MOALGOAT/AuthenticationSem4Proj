@@ -136,6 +136,36 @@ namespace Authentication.Controllers
             }
         }
 
+        [AllowAnonymous]
+        [HttpPost("/api/legal/login")]
+        public async Task<IActionResult> LoginLegal([FromBody] LoginDTO user)
+        {
+            _logger.LogInformation("Attempting to log in admin user {Username}", user.username);
+
+            var validUser = await _userService.ValidateUser(user);
+
+            try
+            {
+                if (validUser.role == 2)
+                {
+                    var token = GenerateJwtToken(user.username, issuer, secret, 2, _id: validUser._id);
+                    LogIPAddress();
+                    _logger.LogInformation("Admin user {Username} logged in successfully", user.username);
+                    return Ok(new { token });
+                }
+                else
+                {
+                    _logger.LogWarning("Invalid role for admin user {Username}. Login attempt rejected.", user.username);
+                    return Unauthorized("Invalid username or password.");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while generating JWT token: {Message}", ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred during login.");
+            }
+        }
+
         [HttpGet("authorized")]
         [Authorize]
         public IActionResult GetAuthorized()
