@@ -1,4 +1,4 @@
-﻿using Authentication.Service;
+﻿/*using Authentication.Service;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 
@@ -66,3 +66,4 @@ namespace Authentication.Models
         }
     }
 }
+*/
