@@ -59,7 +59,7 @@ namespace Authentication.Controllers
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, username),
+                new Claim("username", username),
                 new Claim(ClaimTypes.Role, role.ToString()),
                 new Claim("_id", _id.ToString())
             };
