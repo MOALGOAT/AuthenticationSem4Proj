@@ -88,7 +88,7 @@ namespace Authentication.Controllers
             {
                 if (validUser.role == 1)
                 {
-                    var token = GenerateJwtToken(user.username, issuer, secret, 1, _id: validUser._id);
+                    var token = GenerateJwtToken(validUser.username, issuer, secret, 1, _id: validUser._id);
                     LogIPAddress();
                     _logger.LogInformation("User {Username} logged in successfully", user.username);
                     return Ok(new { token });
@@ -118,7 +118,7 @@ namespace Authentication.Controllers
             {
                 if (validUser.role == 2)
                 {
-                    var token = GenerateJwtToken(user.username, issuer, secret, 2, _id: validUser._id);
+                    var token = GenerateJwtToken(validUser.username, issuer, secret, 2, _id: validUser._id);
                     LogIPAddress();
                     _logger.LogInformation("Admin user {Username} logged in successfully", user.username);
                     return Ok(new { token });
