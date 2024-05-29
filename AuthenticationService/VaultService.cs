@@ -38,7 +38,7 @@ namespace Authentication
             _vaultClient = new VaultClient(vaultClientSettings);
         }
 
-        public async Task<string> GetSecretAsync(string path, string key)
+        public async Task<string?> GetSecretAsync(string path, string key)
         {
             try
             {
@@ -59,7 +59,7 @@ namespace Authentication
             }
             catch (Exception ex)
             {
-                throw new Exception($"Unexpected error: {ex.Message}");
+                return null + "fejl ved hentning af secret";
             }
         }
 
