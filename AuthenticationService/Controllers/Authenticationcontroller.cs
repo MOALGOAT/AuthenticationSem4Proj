@@ -43,9 +43,7 @@ namespace Authentication.Controllers
 
             // Hent hemmeligheden og udstederen fra Vault
             secret = config["SecretKey"] ?? "noSecret";
-            _logger.LogInformation("Secret: {0}", secret);
             issuer = config["IssuerKey"] ?? "noIssuer";
-            _logger.LogInformation("Issuer: {0}", issuer);
         }
 
         private string GenerateJwtToken(string username, string issuer, string secret, int role, Guid _id)
