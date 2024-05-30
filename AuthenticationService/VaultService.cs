@@ -59,7 +59,7 @@ namespace Authentication
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error retrieving secret from Vault: {ex.Message}")
+                Console.WriteLine("Error retrieving secret from Vault: {ex.Message}");
                 return null;
             }
         }
